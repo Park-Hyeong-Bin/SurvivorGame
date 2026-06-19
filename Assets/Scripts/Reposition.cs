@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class Reposition : MonoBehaviour
 {
+    
+    
     // OnTriggerExit2D 트리거 콜라이더에서 벗어났을떄 호출되는 함수
     private void OnTriggerExit2D(Collider2D collision)
     {
