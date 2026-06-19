@@ -25,6 +25,14 @@ public class Enemy : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
         spriter = GetComponent<SpriteRenderer>();
     }
+    
+    // OnEnable: 객체가 활성화 될 때마다 호출
+    private void OnEnable()
+    {
+        // 프리펩은 Player를 참조(할동) 하지 못하므로
+        // GameManager를 통해 매번 플레이어를 target으로 할당한다.
+        target = GameManager.instance.player.GetComponent<Rigidbody2D>();
+    }
 
     private void FixedUpdate()
     {
@@ -40,5 +48,10 @@ public class Enemy : MonoBehaviour
         
         // 4. 잔여 속도 제거 플레이어랑 충돌하면, 물리 속도를 0으로
         rigid.linearVelocity = Vector2.zero;
+    }
+
+    void LateUpdate()
+    {
+        spriter.flipX = target.position.x < rigid.position.x;
     }
 }
