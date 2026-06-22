@@ -10,7 +10,7 @@ public class SpawnData
     public int spriteType;
 
     //스폰 간격(작을수록 자주 등장)
-    public float spawnTume;
+    public float spawnTime;
     
     //몬스터 체력
     public float health;
