@@ -1,4 +1,5 @@
 using System;
+using Unity.Cinemachine;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -69,6 +70,32 @@ public class Enemy : MonoBehaviour
         spriter.flipX = target.position.x < rigid.position.x;
     }
 
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (!other.CompareTag("Bullet"))
+        {
+            return;
+        }
+        
+        //충돌된 Bullet 컴포넌트의 데미지 만크 ㅁ체력 감소
+        health -= other.GetComponent<Bullet>().damage;
+
+        if (health > 0)
+        {
+            //피격 반응 추가
+            
+        }
+        else
+        {
+            Dead();
+        }
+    }
+
+    void Dead()
+    {
+        gameObject.SetActive(false);
+    }
+    
     // 난이도 데이터를 파라미터로 전달받아 적 객체 초기화
     public void Init(SpawnData data)
     {
