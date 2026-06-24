@@ -10,18 +10,23 @@ public class Player : MonoBehaviour
     // 이동 속도
     public float speed;
     
+    //가장 가까운 적을 찾느 스캐너
+    public Scanner scanner;
+    
     // 객체가 가진 물리 컴포넌트
     Rigidbody2D rigid;
     // 스프라이트 렌더러 컴포넌트
     SpriteRenderer spriter;
     // 애니메이션 상태 제어 컴포넌트
     Animator anim;
+    
 
     void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
         spriter = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
+        scanner = GetComponent<Scanner>();
     }
     
     // FixedUpdate: 물리 이동은 이곳에서
