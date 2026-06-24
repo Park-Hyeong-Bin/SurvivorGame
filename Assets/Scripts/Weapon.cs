@@ -10,13 +10,13 @@ public class Weapon : MonoBehaviour
     public int count; // 근접 = 칼날 개수 , 원거리 = 관통 횟수
     public float speed; // 근접 = 회전 속도, 원거리 = 연사속도 
 
-    public float timer; //시간계수
+    private float timer; //원거리 발사 타이머
     private Player player;// 부모 플레이어
 
     void Awake()
     {
         //부모 객체인 Player 컴포넌트 가져오기(WeaponPlayer)
-        player = GetComponent<Player>();
+        player = GetComponentInParent<Player>();
     }
     
     //메모리에 올라 갈 때 처음 1회 자동 호출
@@ -61,7 +61,7 @@ public class Weapon : MonoBehaviour
                 Arrange();//칼날 원형 배치
                 break;
             case 1 :
-                speed = 0.3;
+                speed = 0.3f;
                 break;
             default:
                 break;
@@ -90,18 +90,18 @@ public class Weapon : MonoBehaviour
             // 회전된 위 방향으로 1.5 바깥으로 위치(월드 기준)
             bullet.Translate(bullet.up * 1.5f,Space.World);
             
-            bullet.GetComponent<Bullet>().Init(damage,-1);
+            bullet.GetComponent<Bullet>().Init(damage,-1,Vector3.zero);
         }
     }
 
     void Fire()
     {
         //조준 대상이 없는 경우 필터링
-        if (player.scanner.nearestTraget == null)
+        if (player.scanner.nearestTarget == null)
             return;
         
         //대상 방향을 계산
-        Vector3 targetPos = player.scanner.nearestTraget.position;
+        Vector3 targetPos = player.scanner.nearestTarget.position;
         Vector3 dir = (targetPos - transform.position).normalized;
         
         //풀 매니저에서 총알을 꺼내 위치, 회전 세팅(대상을 바라보도록)
