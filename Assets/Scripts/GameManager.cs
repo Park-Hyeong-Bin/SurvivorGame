@@ -17,12 +17,19 @@ public class GameManager : MonoBehaviour
     [Header("# Player Data")]
     public int level = 1;
     public int kill;
+    public int health;
+    public int maxHealth = 100;
     public int exp;
     public int[] nextExp = { 3, 5, 10, 20, 150, 210, 280, 360, 450, 600}; //임시 레벨업 테이블
     
     private void Awake()
     {
         instance = this;
+    }
+
+    void Start()
+    {
+        health = maxHealth; // 게임 시작시 최대 체력으로 초기화
     }
 
     void Update()
