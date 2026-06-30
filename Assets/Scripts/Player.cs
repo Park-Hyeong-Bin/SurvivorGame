@@ -4,57 +4,76 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
-    // 방향 키 입력 받는 벡터 ( x= 좌우, y= 상하)
+    //방향 키 입력 받는 벡터 (x좌우 ,y상하)
     public Vector2 inputVec;
-    
-    // 이동 속도
+
+    //이동 속도
     public float speed;
-    
-    // 가장 가까운 적을 찾는 스캐너
+
+    //가장 가까운 적을 찾는 스캐너
     public Scanner scanner;
-    
-    // 객체가 가진 물리 컴포넌트
+
+    //객체가 가진 물리 컴포넌트
     Rigidbody2D rigid;
-    // 스프라이트 렌더러 컴포넌트
-    SpriteRenderer spriter;
-    // 애니메이션 상태 제어 컴포넌트
+
+    //스프라이트 렌더러 컴포넌트
+    private SpriteRenderer sprite;
+
+    //애니메이션 상태 제어 컴포넌트
     Animator anim;
 
-    void Awake()
+    //무기를 드는 양손(왼/오)
+    public Hand[] hands;
+
+    private void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
-        spriter = GetComponent<SpriteRenderer>();
+        sprite = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
         scanner = GetComponent<Scanner>();
+        //자식의 Hand들을 가져올때, true-> 비활성 손도 포함해서 가져오게 됨
+        //손은 평소엔 비활성 상태였다가 무기가 생기면 활성, 비활성 상태로 미리 배열에 담기 위함
+        hands = GetComponentsInChildren<Hand>(true);
     }
-    
-    // FixedUpdate: 물리 이동은 이곳에서
+
+    //물리이동은 FixedUpdate에서 진행
     private void FixedUpdate()
     {
-        // 다음에 이동할 양 = 방향 * 속도 * 프레임 시간
+        //다음에 이동할 양 = 방향 * 속도 * 프레임시간
         Vector2 nextVec = inputVec.normalized * (speed * Time.fixedDeltaTime);
-        // 현재위치+이동량 
+        //현재위지 + 이동방향
         rigid.MovePosition(rigid.position + nextVec);
     }
-    
-    // LateUpdate: 모든 업데이트가 끝난 뒤 실행. 방향 반전같은 것은 후처리에 적합
+
+    //모든 업데이트가 끝난 뒤 수행 하는 LateUpdate, 방향 전환같은 후처리에 적합
     void LateUpdate()
     {
         if (inputVec.x != 0)
         {
-            spriter.flipX = inputVec.x < 0;
+            sprite.flipX = inputVec.x < 0;
         }
-        
-        anim.SetFloat("Speed", inputVec.magnitude); // 입력 벡터의 크기(magnitude)를 애니메이터의 변수로 전달
+        anim.SetFloat("Speed", inputVec.magnitude);//입력 벡터의 크기
     }
 
     void OnMove(InputValue value)
     {
         inputVec = value.Get<Vector2>();
     }
-    
+
     void OnGUI()
     {
         GUI.Label(new Rect(10, 10, 300, 20), inputVec.ToString());
+    }
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
     }
 }
