@@ -81,6 +81,9 @@ public class Weapon : MonoBehaviour
             default:
                 break;
         }
+        
+        //새 무기 생성 될 때, 이미 강화된 기어 효과(공속 등) 이 무기에도 적용되도록 메시지 전달
+        player.BroadcastMessage("ApplyGear");
     }
     
     public void LevelUp(float damage, int count)
