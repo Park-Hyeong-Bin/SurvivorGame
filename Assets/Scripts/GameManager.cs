@@ -1,26 +1,25 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     
-    [Header("#Game Object")]
+    [Header("# Game Objects")]
     public Player player;
     public PoolManager pool;
     
     [Header("# Game Controls")]
-    // 흐르는 게임 시간 - 난이도 계산용도
     public float gameTime;
-    // 최대 게임 시간 - 난이도 증가 기준
     public float maxGameTime;
 
     [Header("# Player Data")]
-    public int level = 1;
+    public int level;
     public int kill;
+    public int exp;
+    public List<int> nextExp = new List<int> { 3, 5, 10, 20, 150, 210, 280, 360, 450, 600 }; // 동적 배열을 위해 일반 배열 대신 리스트 자료구조 변경
     public int health;
     public int maxHealth = 100;
-    public int exp;
-    public int[] nextExp = { 3, 5, 10, 20, 150, 210, 280, 360, 450, 600}; //임시 레벨업 테이블
     
     private void Awake()
     {
@@ -29,7 +28,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        health = maxHealth; // 게임 시작시 최대 체력으로 초기화
+        health = maxHealth; // 게임 시작시 체력을 최대체력으로 초기화
     }
 
     void Update()
@@ -44,15 +43,21 @@ public class GameManager : MonoBehaviour
         }
     }
     
-    //경험치 획득 및 레벨업 로직
+    // 경험치 획득 및 레벨업 로직
     public void GetExp()
     {
         exp++;
 
-        if (exp == nextExp[level-1])
+        if (exp == nextExp[level])
         {
             level++;
             exp = 0;
+
+            // 초기 레벨 이상 초과시, 경험치 테이블을 추가하면서 최대 경험치를 복사
+            if (level >= nextExp.Count)
+            {
+                nextExp.Add(nextExp[nextExp.Count - 1]);
+            }
         }
     }
 }
