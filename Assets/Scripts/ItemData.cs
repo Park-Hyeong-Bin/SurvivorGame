@@ -12,9 +12,11 @@ public class ItemData : ScriptableObject
     public ItemType type; // 이 아이템의 종류
     public int itemId; // 아이템 고유 번호
     public string itemName; // 아이템 이름 (UI 표시)
-    public string itemDesc; // 아이템 설명 (UI 표시)
     public Sprite itemIcon; // 아이템 아이콘 (UI 표시)
 
+    [TextArea]//인스펙터에서 여러줄 입력 가능하도록 설정
+    public string itemDesc; // 아이템 설명 (UI 표시)
+    
     [Header("# Level Data")]
     public float baseDamage; // 0레벨 기본 데미지
     public int baseCount; // 기본 갯수 (근접은: 칼날수, 원거리: 관통수)
