@@ -27,10 +27,11 @@ public class GameManager : MonoBehaviour
     {
         instance = this;
     }
-
-    void Start()
+    
+    //public 하는 이유 : 버튼 Onclick 목록에 보여주기 위함
+    public void GameStart()
     {
-        isLive = true;
+        isLive = true; // 게임 진행 시작
         uiLevelUp.Select(0); // 기본 무기 (0:삽) 제공
         health = maxHealth; // 게임 시작시 체력을 최대체력으로 초기화
     }
@@ -55,7 +56,7 @@ public class GameManager : MonoBehaviour
     {
         exp++;
 
-        if (exp == nextExp[level])
+        if (exp == nextExp[level-1])
         {
             level++;
             exp = 0;
