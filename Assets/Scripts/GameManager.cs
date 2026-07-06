@@ -19,7 +19,8 @@ public class GameManager : MonoBehaviour
     public float gameTime;
     public float maxGameTime;
 
-    [Header("# Player Data")]
+    [Header("# Player Data")] 
+    public int playerId;//플레이어 아이디
     public int level;
     public int kill;
     public int exp;
