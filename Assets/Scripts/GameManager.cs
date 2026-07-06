@@ -89,7 +89,9 @@ public class GameManager : MonoBehaviour
         if (gameTime > maxGameTime)
         {
             gameTime = maxGameTime;
+            GameVictory();
         }
+
     }
     
     // 경험치 획득 및 레벨업 로직
