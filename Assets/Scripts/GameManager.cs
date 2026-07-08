@@ -12,15 +12,14 @@ public class GameManager : MonoBehaviour
     public PoolManager pool;
     public LevelUp uiLevelUp; // 레벨업 선택 UI
     public GameResult uiResult; // 게임 오버/승리 결과창
-    public GameObject enemyCleaner;//게임 승리시 남은 몬스터를 일괄 제거(거대 총알 Killzone)
+    public GameObject enemyCleaner; // 승리시 남은 몬스터를 일괄 제거용 (거대 총알 KillZone)
 
     [Header("# Game Controls")]
     public bool isLive; // 일시정지용
     public float gameTime;
     public float maxGameTime;
 
-    [Header("# Player Data")] 
-    public int playerId;//플레이어 아이디
+    [Header("# Player Data")]
     public int level;
     public int kill;
     public int exp;
@@ -40,6 +39,9 @@ public class GameManager : MonoBehaviour
         uiLevelUp.Select(0); // 기본 무기 (0:삽) 제공
         health = maxHealth; // 게임 시작시 체력을 최대체력으로 초기화
         Resume();
+        
+        AudioManager.instance.PlayBgm(true); // 배경음 시작
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.Select); // 선택 효과음
     }
 
     // 플레이어 사망시 호출
@@ -52,9 +54,12 @@ public class GameManager : MonoBehaviour
     {
         isLive = false;
         yield return new WaitForSeconds(0.5f); // 묘비 애니메이션이 재생될 시간
-        uiResult.gameObject.SetActive(true);//결과창 켜기
-        uiResult.GameOver();//게임 종료시 게임 오버 호출
+        uiResult.gameObject.SetActive(true); // 결과창 켜기
+        uiResult.GameOver();
         Stop(); // 시간 정지
+        
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.Lose); // 패배 효과음
+        AudioManager.instance.PlayBgm(false); // 배경음 정지
     }
 
     public void GameVictory()
@@ -65,11 +70,14 @@ public class GameManager : MonoBehaviour
     IEnumerator GameVictoryRoutine()
     {
         isLive = false;
-        enemyCleaner.SetActive(true);//몬스터 일괄 제거
-        yield return new WaitForSeconds(0.5f);//처치 애니메이션 볼 시간 확보
-        uiResult.gameObject.SetActive(true);
-        uiResult.GameVictory();
+        enemyCleaner.SetActive(true); // 몬스터 일괄 제거
+        yield return new WaitForSeconds(0.5f); // 처치 애니메이션 볼 시간 확보
+        uiResult.gameObject.SetActive(true); // 결과창 보기
+        uiResult.GameVictory(); 
         Stop();
+        
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.Win); // 승리 효과음
+        AudioManager.instance.PlayBgm(false); // 배경음 정지
     }
 
     // 리트라이 버튼이 호출
@@ -92,18 +100,15 @@ public class GameManager : MonoBehaviour
             gameTime = maxGameTime;
             GameVictory();
         }
-
     }
     
     // 경험치 획득 및 레벨업 로직
     public void GetExp()
     {
-        exp++;
-
         if (!isLive)
-        {
             return;
-        }
+        
+        exp++;
 
         if (exp == nextExp[level])
         {

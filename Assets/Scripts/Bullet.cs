@@ -21,7 +21,7 @@ public class Bullet : MonoBehaviour
     {
         this.damage = damage;
         this.penetration = penetration;
-        if (penetration > -1)
+        if (penetration >= 0)
         {
             rigid.linearVelocity = dir * 15;
         }
@@ -31,16 +31,25 @@ public class Bullet : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         // 적이 아니거나, 근접(-1)인 경우 관통을 소비 안함
-        if (!collision.CompareTag("Enemy") || penetration == -1)
+        if (!collision.CompareTag("Enemy") || penetration == -100)
             return;
 
         penetration--; // 관통 횟수 감소
         
         // 관통을 모두 소모하고 -1이되면 총알 소멸
-        if (penetration == -1)
+        if (penetration < 0)
         {
             rigid.linearVelocity = Vector2.zero; // 재사용 대비해서 속도 초기화
             gameObject.SetActive(false); // 비활성화로 총알 소멸
         }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (!collision.CompareTag("Area") || penetration == -100)
+            return;
+        
+        rigid.linearVelocity = Vector2.zero;
+        gameObject.SetActive(false);
     }
 }

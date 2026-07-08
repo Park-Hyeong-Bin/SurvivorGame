@@ -12,20 +12,28 @@ public class Spawner : MonoBehaviour
     // 현재 난이도 (게임 시간에 따라 변함)
     private int difficulty;
 
-    void Awake()
+    private float levelTime;
+    
+    
+    private void Awake() // Start 또는 Script Exec Order로 명시적으로 우선순위 조절 필요
     {
         // 스포너 자신+자식 트랜스폼을 한번에 가져옴
         // GetComponentsInChildren 's' 복수형 이어야 자식 전부 가져옴 
         spawnPoint = GetComponentsInChildren<Transform>();
+
+        levelTime = GameManager.instance.maxGameTime / spawnData.Length;
     }
     
     void Update()
     {
+        if (!GameManager.instance.isLive) // 일시 정지 상태에서는 중단
+            return;
+        
         // 매 프레임마다 경과 시간 누적
         timer += Time.deltaTime;
         
         // 난이도 상승 연산
-        difficulty = (int)(GameManager.instance.gameTime / 10f);
+        difficulty = (int)(GameManager.instance.gameTime / levelTime);
         
         // 난이도가 데이터 개수를 넘지않도록 제한(배열 범위를 초과 방지)
         if (difficulty >= spawnData.Length)

@@ -102,6 +102,7 @@ public class Enemy : MonoBehaviour
             // 피격 반응 추가
             anim.SetTrigger("Hit"); // Animator의 Hit 발동 -> Hit 애니메이션 클립 재생
             StartCoroutine(KnockBack()); // 넉백 코루틴 실행
+            AudioManager.instance.PlaySfx(AudioManager.Sfx.Hit); // 근접무기 피격 효과음
         }
         else
         {
@@ -113,6 +114,9 @@ public class Enemy : MonoBehaviour
             anim.SetBool("Dead", true); // 사망 애니메이션 재생을 위한 파라미터 값 전달
             GameManager.instance.kill++;
             GameManager.instance.GetExp();
+            
+            if (GameManager.instance.isLive)
+                AudioManager.instance.PlaySfx(AudioManager.Sfx.Dead); // 적 사망 효과음
         }
     }
 
