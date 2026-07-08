@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -13,6 +14,7 @@ public class GameManager : MonoBehaviour
     public LevelUp uiLevelUp; // 레벨업 선택 UI
     public GameResult uiResult; // 게임 오버/승리 결과창
     public GameObject enemyCleaner; // 승리시 남은 몬스터를 일괄 제거용 (거대 총알 KillZone)
+    public Transform uiJoy;
 
     [Header("# Game Controls")]
     public bool isLive; // 일시정지용
@@ -110,7 +112,7 @@ public class GameManager : MonoBehaviour
         
         exp++;
 
-        if (exp == nextExp[level])
+        if (exp == nextExp[level-1])
         {
             level++;
             exp = 0;
@@ -128,11 +130,14 @@ public class GameManager : MonoBehaviour
     {
         isLive = false;
         Time.timeScale = 0; // 시간 흐름 속도 0 -> 게임 전체 정지
+        uiJoy.localScale = Vector3.zero;
+
     }
 
     public void Resume()
     {
         isLive = true;
         Time.timeScale = 1; // 시간 흐름 속도 1 -> 정상 속도 복원
+        uiJoy.localScale = Vector3.one;
     }
 }
